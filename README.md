@@ -67,19 +67,22 @@ nodejs-app-77f7b96899-hvfrl   32m          1676Mi
 
 ### Скриншоты
 Собственный UI Pyroscope:
-![](https://habrastorage.org/webt/u_/ef/j_/u_efj_yo8dmtyhoa7j4bf1eb7ey.png)
-
-![](https://habrastorage.org/webt/r9/gd/39/r9gd39okzam_mdi2vkvysaewmqk.png)
 
 Pyroscope через Grafana плагин
 
-![](https://habrastorage.org/webt/hc/kf/2t/hckf2tdjt1u10idgqik6fvgs8ia.png)
+![](https://habrastorage.org/webt/jc/dl/jj/jcdljjhrd7qfjxcpmi3vc6jwkns.png)
 
-![](https://habrastorage.org/webt/i6/86/ik/i686ike90fesciwfwz7qmwvnp_e.png)
+![](https://habrastorage.org/webt/dc/sz/ir/dcszirjryh_ugttlhdnraq6m7fk.png)
 
-![](https://habrastorage.org/webt/33/um/tj/33umtjat4zl3shoymvvd24waegm.png)
+![](https://habrastorage.org/webt/nc/qx/ve/ncqxveh6g1lo6xndhcg_mb46fwy.png)
 
-![](https://habrastorage.org/webt/i4/fw/w8/i4fww8n1wahrupf0wf3bcssut5y.png)
+![](https://habrastorage.org/webt/z3/ou/ud/z3ouudbzmayznipiak-5w7frvjc.png)
+
+![](https://habrastorage.org/webt/3g/fu/87/3gfu87hmdm1h-ckgh6d6tzsellu.png)
+
+![](https://habrastorage.org/webt/zk/3l/at/zk3latbwghzaxdnuyezha0mx7zc.png)
+
+![](https://habrastorage.org/webt/5r/p0/_w/5rp0_wgdcnili5ytzo-ovv1bib8.png)
 
 Что мы можем сказать по поводу NodeJS кода после профилирования с помощью Pyroscope:
 - Мы видим что функция leakMemoryRoute в файле ./app.js на строке 52 имеет утечку памяти и занимает 3.07 GiB.
