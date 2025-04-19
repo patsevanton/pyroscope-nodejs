@@ -67,6 +67,9 @@ nodejs-app-77f7b96899-hvfrl   32m          1676Mi
 
 ### Скриншоты
 Собственный UI Pyroscope:
+![](https://habrastorage.org/webt/zk/3l/at/zk3latbwghzaxdnuyezha0mx7zc.png)
+
+![](https://habrastorage.org/webt/5r/p0/_w/5rp0_wgdcnili5ytzo-ovv1bib8.png)
 
 Pyroscope через Grafana плагин
 
@@ -80,10 +83,7 @@ Pyroscope через Grafana плагин
 
 ![](https://habrastorage.org/webt/3g/fu/87/3gfu87hmdm1h-ckgh6d6tzsellu.png)
 
-![](https://habrastorage.org/webt/zk/3l/at/zk3latbwghzaxdnuyezha0mx7zc.png)
-
-![](https://habrastorage.org/webt/5r/p0/_w/5rp0_wgdcnili5ytzo-ovv1bib8.png)
 
 Что мы можем сказать по поводу NodeJS кода после профилирования с помощью Pyroscope:
-- Мы видим что функция leakMemoryRoute в файле ./app.js на строке 52 имеет утечку памяти и занимает 3.07 GiB.
-- Мы видим что функция slowRoute в файле ./app.js на 41 строке долго отвечает 10.2 mins.
+- Мы видим что функция leakMemoryRoute в файле ./app.js на строке 63 имеет утечку памяти и занимает 223MB.
+- Мы видим что функция slowRoute в файле ./app.js на 51 строке долго отвечает 6.96 mins.
