@@ -1,0 +1,8 @@
+alloy:
+  enabled: false
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - pyroscope.apatsev.org.ru
