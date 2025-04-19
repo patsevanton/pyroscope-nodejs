@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: nodejs-app-ingress
 spec:
+  ingressClassName: nginx
   rules:
     - host: nodejs-app.apatsev.org.ru
       http:
