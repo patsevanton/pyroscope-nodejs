@@ -19,7 +19,7 @@ datasources:
       - name: Pyroscope
         type: pyroscope
         access: proxy
-        url: http://pyroscope.pyroscope-test.svc.cluster.local:4040
+        url: http://pyroscope.pyroscope.svc.cluster.local:4040
         isDefault: false
         version: 1
         editable: true
