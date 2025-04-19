@@ -27,17 +27,11 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
 
-# Создаем новый namespace (пространство имен) 'pyroscope-test' в кластере Kubernetes
-# Namespace помогает изолировать ресурсы и управлять доступом
-```shell
-kubectl create namespace pyroscope-test
-```
-
 # Устанавливаем Pyroscope в namespace 'pyroscope-test' используя Helm chart из репозитория Grafana
 # -n - указывает namespace для установки
 # --values - позволяет передать кастомные настройки из файла values_pyroscope.yaml
 ```shell
-helm -n pyroscope-test install pyroscope grafana/pyroscope --values values_pyroscope.yaml
+helm upgrade -n pyroscope --create-namespace --install pyroscope grafana/pyroscope --values values_pyroscope.yaml
 ```
 
 # Устанавливаем/обновляем Grafana с настройками:
@@ -45,5 +39,5 @@ helm -n pyroscope-test install pyroscope grafana/pyroscope --values values_pyros
 # - Ingress для внешнего доступа
 # - Плагин grafana-pyroscope-app
 ```shell
-helm upgrade -n pyroscope-test --install grafana grafana/grafana -f values_grafana.yaml
+helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f values_grafana.yaml
 ```

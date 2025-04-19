@@ -1,7 +1,3 @@
-image:
-  repository: grafana/grafana
-  tag: main
-
 env:
   GF_INSTALL_PLUGINS: grafana-pyroscope-app
   GF_AUTH_ANONYMOUS_ENABLED: "true"
@@ -15,3 +11,15 @@ ingress:
     - grafana.apatsev.org.ru
   paths:
     - /
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Pyroscope
+        type: pyroscope
+        access: proxy
+        url: http://pyroscope.pyroscope-test.svc.cluster.local:4040
+        isDefault: false
+        version: 1
+        editable: true
