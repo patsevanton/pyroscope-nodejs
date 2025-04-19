@@ -42,7 +42,7 @@ helm upgrade -n pyroscope --create-namespace --install pyroscope grafana/pyrosco
 helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f values_grafana.yaml
 ```
 
-Генерируем нагрузку для профилирования для docker-compose:
+Можно генерировать нагрузку для профилирования при запуске через docker-compose:
 ```shell
 while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; curl http://localhost:3000/leak; done
 ```
@@ -58,3 +58,13 @@ kubectl apply -f ingress.yaml
 ```shell
 while true; do curl nodejs-app.apatsev.org.ru/fast; curl nodejs-app.apatsev.org.ru/slow; curl nodejs-app.apatsev.org.ru/leak; done
 ```
+
+После запуска нагрузки
+```shell
+k top pod
+NAME                          CPU(cores)   MEMORY(bytes)   
+nodejs-app-77f7b96899-gprd8   390m         2125Mi          
+nodejs-app-77f7b96899-z9fs8   533m         4087Mi  
+```
+
+Скриншоты
