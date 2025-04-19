@@ -20,8 +20,8 @@ spec:
           ports:
             - containerPort: 3000
           env:
-            - name: NODE_ENV
-              value: "production"
+            - name: PYROSCOPE_SERVER_ADDRESS
+              value: "http://pyroscope.pyroscope:4040"
           livenessProbe:
             httpGet:
               path: /
