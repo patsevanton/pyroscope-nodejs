@@ -57,12 +57,12 @@ kubectl apply -f kubernetes/ingress.yaml
 while true; do curl nodejs-app.apatsev.org.ru/fast; curl nodejs-app.apatsev.org.ru/slow; curl nodejs-app.apatsev.org.ru/leak; done
 ```
 
-### После запуска нагрузки
+### Смотрим сколько pod занимают память
 ```shell
 k top pod
 NAME                          CPU(cores)   MEMORY(bytes)   
-nodejs-app-77f7b96899-gprd8   390m         2125Mi          
-nodejs-app-77f7b96899-z9fs8   533m         4087Mi  
+nodejs-app-77f7b96899-7cff6   19m          1652Mi          
+nodejs-app-77f7b96899-hvfrl   32m          1676Mi 
 ```
 
 ### Скриншоты
