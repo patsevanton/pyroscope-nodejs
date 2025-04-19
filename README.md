@@ -45,14 +45,5 @@ helm -n pyroscope-test install pyroscope grafana/pyroscope --values values_pyros
 # - Ingress для внешнего доступа
 # - Плагин grafana-pyroscope-app
 ```shell
-helm upgrade -n pyroscope-test --install grafana grafana/grafana \
---set image.repository=grafana/grafana \
---set image.tag=main \
---set env.GF_INSTALL_PLUGINS=grafana-pyroscope-app \
---set env.GF_AUTH_ANONYMOUS_ENABLED=true \
---set env.GF_AUTH_ANONYMOUS_ORG_ROLE=Admin \
---set ingress.enabled=true \
---set ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
---set ingress.hosts[0]=grafana.apatsev.org.ru \
---set ingress.paths[0]=/
+helm upgrade -n pyroscope-test --install grafana grafana/grafana -f values_grafana.yaml
 ```

@@ -1,0 +1,13 @@
+env:
+  GF_INSTALL_PLUGINS: grafana-pyroscope-app
+  GF_AUTH_ANONYMOUS_ENABLED: true
+  GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - host: grafana.apatsev.org.ru
+      paths:
+        - /
