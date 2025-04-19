@@ -27,7 +27,7 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
 
-# Устанавливаем Pyroscope в namespace 'pyroscope-test' используя Helm chart из репозитория Grafana
+# Устанавливаем Pyroscope в namespace 'pyroscope' используя Helm chart из репозитория Grafana
 # -n - указывает namespace для установки
 # --values - позволяет передать кастомные настройки из файла values_pyroscope.yaml
 ```shell
