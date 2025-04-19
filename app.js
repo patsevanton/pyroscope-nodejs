@@ -3,7 +3,7 @@ const http = require('http');
 
 // Инициализация Pyroscope
 Pyroscope.init({
-  serverAddress: 'http://pyroscope-server:4040',
+  serverAddress: process.env.PYROSCOPE_SERVER_ADDRESS || 'http://pyroscope-server:4040', // <- Только это берётся из переменных окружения
   appName: 'nodejs-example-app',
   tags: {
     environment: 'development',

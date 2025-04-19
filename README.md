@@ -41,3 +41,8 @@ helm upgrade -n pyroscope --create-namespace --install pyroscope grafana/pyrosco
 ```shell
 helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f values_grafana.yaml
 ```
+
+Генерируем нагрузку для профилирования:
+```shell
+while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; done
+```

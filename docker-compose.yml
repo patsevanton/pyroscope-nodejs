@@ -10,6 +10,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - PYROSCOPE_SERVER_ADDRESS=http://pyroscope-server:4040
+      PYROSCOPE_SERVER_ADDRESS: "http://pyroscope-server:4040"
     depends_on:
       - pyroscope-server
