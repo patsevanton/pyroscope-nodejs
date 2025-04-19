@@ -42,7 +42,14 @@ helm upgrade -n pyroscope --create-namespace --install pyroscope grafana/pyrosco
 helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f values_grafana.yaml
 ```
 
-Генерируем нагрузку для профилирования:
+Генерируем нагрузку для профилирования для docker-compose:
 ```shell
 while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; curl http://localhost:3000/leak; done
+```
+
+# Запускаем nodejs-app в kubernetes
+```shell
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
 ```
