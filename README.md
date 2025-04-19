@@ -44,5 +44,5 @@ helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f 
 
 Генерируем нагрузку для профилирования:
 ```shell
-while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; done
+while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; curl http://localhost:3000/leak; done
 ```
