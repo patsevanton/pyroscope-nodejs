@@ -1,0 +1,15 @@
+version: '3'
+services:
+  pyroscope-server:
+    image: grafana/pyroscope:1.13.2
+    ports:
+      - "4040:4040"
+
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PYROSCOPE_SERVER_ADDRESS=http://pyroscope-server:4040
+    depends_on:
+      - pyroscope-server
