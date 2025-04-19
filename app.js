@@ -3,7 +3,7 @@ const http = require('http');
 
 // Инициализация Pyroscope
 Pyroscope.init({
-  serverAddress: process.env.PYROSCOPE_SERVER_ADDRESS || 'http://pyroscope-server:4040', // <- Только это берётся из переменных окружения
+  serverAddress: process.env.PYROSCOPE_SERVER_ADDRESS || 'http://pyroscope-server:4040',
   appName: 'nodejs-example-app',
   tags: {
     environment: 'development',
@@ -16,12 +16,17 @@ Pyroscope.init({
 
 Pyroscope.start();
 
+// Глобальный массив для утечки памяти
+const memoryLeak = [];
+
 // Создаем HTTP сервер с разными эндпоинтами для демонстрации
 const server = http.createServer((req, res) => {
   if (req.url === '/fast') {
     fastRoute(req, res);
   } else if (req.url === '/slow') {
     slowRoute(req, res);
+  } else if (req.url === '/leak') {
+    leakMemoryRoute(req, res);
   } else {
     res.writeHead(200);
     res.end('Hello from Node.js!\n');
@@ -42,6 +47,20 @@ function slowRoute(req, res) {
 
   res.writeHead(200);
   res.end(`Slow response! Sum: ${sum}\n`);
+}
+
+function leakMemoryRoute(req, res) {
+  // Добавляем большие объекты в массив, который никогда не очищается
+  for (let i = 0; i < 1000; i++) {
+    memoryLeak.push({
+      id: Date.now(),
+      data: new Array(1000).fill('leak-data').join(''),
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  res.writeHead(200);
+  res.end(`Added 1000 objects to memory leak. Total: ${memoryLeak.length} objects\n`);
 }
 
 server.listen(3000, () => {
