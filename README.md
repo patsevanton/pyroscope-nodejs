@@ -64,3 +64,14 @@ nodejs-app-77f7b96899-z9fs8   533m         4087Mi
 ```
 
 ### Скриншоты
+![](https://habrastorage.org/webt/hc/kf/2t/hckf2tdjt1u10idgqik6fvgs8ia.png)
+
+![](https://habrastorage.org/webt/i6/86/ik/i686ike90fesciwfwz7qmwvnp_e.png)
+
+![](https://habrastorage.org/webt/33/um/tj/33umtjat4zl3shoymvvd24waegm.png)
+
+![](https://habrastorage.org/webt/i4/fw/w8/i4fww8n1wahrupf0wf3bcssut5y.png)
+
+![](https://habrastorage.org/webt/u_/ef/j_/u_efj_yo8dmtyhoa7j4bf1eb7ey.png)
+
+![](https://habrastorage.org/webt/r9/gd/39/r9gd39okzam_mdi2vkvysaewmqk.png)
