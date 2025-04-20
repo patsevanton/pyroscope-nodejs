@@ -1,6 +1,6 @@
-# Конфигурация Alloy (ранее Grafana Agent)
+# Конфигурация Alloy
 alloy:
-  enabled: false  # Отключаем интеграцию с Alloy/Agent
+  enabled: false  # Отключаем интеграцию с Alloy
 
 # Настройки Ingress для внешнего доступа
 ingress:
