@@ -1,90 +1,154 @@
-# Запуск pyroscope. Профилирование простого nodejs проекта без Grafana Alloy
+# Профилирование Node.js приложения с помощью Pyroscope (без автоинструментирования)
 
-[Pyroscope](https://github.com/grafana/pyroscope) — это инструмент для непрерывного профилирования кода, который помогает находить узкие места в производительности приложений.
+**Pyroscope** — это мощный инструмент непрерывного профилирования, созданный для мониторинга производительности приложений в реальном времени. В этой статье мы рассмотрим, как быстро развернуть Pyroscope, подключить к нему Node.js приложение и проанализировать поведение кода без использования Grafana Alloy.
 
-Основные особенности:
-- Анализирует CPU, память и другие метрики в реальном времени.
-- Поддерживает несколько языков (Go, Python, Java, Ruby и др.).
-- Интегрируется с Grafana, Kubernetes и другими инструментами мониторинга.
-- Позволяет сравнивать профили за разные периоды.
-- Используется для оптимизации производительности сервисов.
 
-В этом посте будет продемонстрирован запуск Pyroscope в docker-compose и в kubernetes.
-Затем будет запущено тестовое NodeJS приложение со специально написанными медленной функцией и функцией с утечкой памяти.
-Отправка данных делается самим NodeJS приложением в Pyroscope, поэтому Grafana Alloy отключен.
+## Что такое Pyroscope?
 
-## Быстрый запуск kubernetes в docker-compose
-### Запускаем нагрузку в:
-```shell
-while true; do curl http://localhost:3000/fast; curl http://localhost:3000/slow; curl http://localhost:3000/leak; done
+[Pyroscope](https://github.com/grafana/pyroscope) — это open-source решение от Grafana Labs для профилирования производительности, которое позволяет:
+
+- отслеживать использование CPU, памяти и других ресурсов в реальном времени;
+- поддерживать профилирование для языков Go, Python, Java, Ruby, Node.js и др.;
+- сравнивать профили за разные промежутки времени;
+- интегрироваться с Grafana, Kubernetes и другими инструментами мониторинга.
+
+
+## Цель эксперимента
+
+В рамках этого примера мы:
+- Запустим Pyroscope как в Docker, так и в Kubernetes (включая Yandex Cloud).
+- Подключим тестовое Node.js приложение с преднамеренно медленной функцией и функцией с утечкой памяти.
+- Сгенерируем нагрузку и проанализируем результаты профилирования.
+
+> **Важно:** Grafana Alloy в этом примере **не используется** — данные отправляются напрямую из Node.js приложения в Pyroscope.
+
+
+## Быстрый старт с Docker Compose
+
+Для начала можно запустить нагрузку локально, имитируя активность пользователя:
+
+```bash
+while true; do \
+  curl http://localhost:3000/fast; \
+  curl http://localhost:3000/slow; \
+  curl http://localhost:3000/leak; \
+done
 ```
 
-## Быстрый запуск kubernetes в Yandex Cloud
-### Устанавливаем kubernetes
-```shell
+## Развёртывание в Kubernetes (Yandex Cloud)
+
+### 1. Клонируем репозиторий с конфигурацией
+
+```bash
 git clone https://github.com/patsevanton/pyroscope-nodejs
-export YC_FOLDER_ID='ваша_folder_id'
+cd pyroscope-nodejs
+```
+
+### 2. Настраиваем инфраструктуру через Terraform
+
+```bash
+export YC_FOLDER_ID='ваш_folder_id'
 terraform apply
+```
+
+Получаем доступ к кластеру:
+
+```bash
 yc managed-kubernetes cluster get-credentials --id xxxx --force
 ```
 
-### Добавляем репозиторий Helm charts от Grafana в локальный список репозиториев
-```shell
+## Установка Pyroscope и Grafana через Helm
+
+### Добавляем Helm репозиторий Grafana
+
+```bash
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
 
-### Устанавливаем Pyroscope в namespace 'pyroscope' используя Helm chart из репозитория Grafana
-Передаем кастомные настройки из файла values_pyroscope.yaml
-```shell
-helm upgrade -n pyroscope --create-namespace --install pyroscope grafana/pyroscope --values values_pyroscope.yaml
+### Устанавливаем Pyroscope
+
+```bash
+helm upgrade -n pyroscope --create-namespace --install pyroscope \
+  grafana/pyroscope --values values_pyroscope.yaml
 ```
 
-### Устанавливаем/обновляем Grafana с настройками:
-Передаем кастомные настройки из файла values_pyroscope.yaml
-```shell
-helm upgrade -n grafana --create-namespace --install grafana grafana/grafana -f values_grafana.yaml
+### Устанавливаем Grafana с поддержкой Pyroscope
+
+```bash
+helm upgrade -n grafana --create-namespace --install grafana \
+  grafana/grafana -f values_grafana.yaml
 ```
 
-## Запускаем nodejs-app в kubernetes
-```shell
+
+## Развёртывание Node.js приложения
+
+Приложение содержит три эндпоинта:
+- `/fast` — быстрый ответ,
+- `/slow` — медленная функция,
+- `/leak` — функция с утечкой памяти.
+
+### Деплой в Kubernetes
+
+```bash
 kubectl apply -f kubernetes/deployment.yaml
 kubectl apply -f kubernetes/service.yaml
 kubectl apply -f kubernetes/ingress.yaml
 ```
 
-### Генерируем нагрузку для профилирования через kubernetes ingress:
-```shell
-while true; do curl nodejs-app.apatsev.org.ru/fast; curl nodejs-app.apatsev.org.ru/slow; curl nodejs-app.apatsev.org.ru/leak; done
+
+## Генерация нагрузки
+
+После деплоя можно запустить нагрузку через Ingress:
+
+```bash
+while true; do \
+  curl nodejs-app.apatsev.org.ru/fast; \
+  curl nodejs-app.apatsev.org.ru/slow; \
+  curl nodejs-app.apatsev.org.ru/leak; \
+done
 ```
 
-### Смотрим сколько pod занимают память
-```shell
-k top pod
+## Мониторинг использования ресурсов
+
+Проверим, сколько памяти потребляют pod-ы:
+
+```bash
+kubectl top pod
+```
+
+Пример вывода:
+
+```
 NAME                          CPU(cores)   MEMORY(bytes)   
 nodejs-app-77f7b96899-7cff6   19m          1652Mi          
 nodejs-app-77f7b96899-hvfrl   32m          1676Mi 
 ```
 
-### Скриншоты
-Собственный UI Pyroscope:
-![](https://habrastorage.org/webt/zk/3l/at/zk3latbwghzaxdnuyezha0mx7zc.png)
+## Анализ профиля
 
-![](https://habrastorage.org/webt/5r/p0/_w/5rp0_wgdcnili5ytzo-ovv1bib8.png)
+Pyroscope предоставляет как собственный web-интерфейс, так и интеграцию с Grafana. Вот как это выглядит:
 
-Pyroscope через Grafana плагин
+### Встроенный UI Pyroscope
 
-![](https://habrastorage.org/webt/jc/dl/jj/jcdljjhrd7qfjxcpmi3vc6jwkns.png)
+![UI 1](https://habrastorage.org/webt/zk/3l/at/zk3latbwghzaxdnuyezha0mx7zc.png)
+![UI 2](https://habrastorage.org/webt/5r/p0/_w/5rp0_wgdcnili5ytzo-ovv1bib8.png)
 
-![](https://habrastorage.org/webt/dc/sz/ir/dcszirjryh_ugttlhdnraq6m7fk.png)
+### Pyroscope в Grafana
 
-![](https://habrastorage.org/webt/nc/qx/ve/ncqxveh6g1lo6xndhcg_mb46fwy.png)
+![Grafana 1](https://habrastorage.org/webt/jc/dl/jj/jcdljjhrd7qfjxcpmi3vc6jwkns.png)
+![Grafana 2](https://habrastorage.org/webt/dc/sz/ir/dcszirjryh_ugttlhdnraq6m7fk.png)
+![Grafana 3](https://habrastorage.org/webt/nc/qx/ve/ncqxveh6g1lo6xndhcg_mb46fwy.png)
+![Grafana 4](https://habrastorage.org/webt/z3/ou/ud/z3ouudbzmayznipiak-5w7frvjc.png)
+![Grafana 5](https://habrastorage.org/webt/3g/fu/87/3gfu87hmdm1h-ckgh6d6tzsellu.png)
 
-![](https://habrastorage.org/webt/z3/ou/ud/z3ouudbzmayznipiak-5w7frvjc.png)
+## Что показывает профилирование?
 
-![](https://habrastorage.org/webt/3g/fu/87/3gfu87hmdm1h-ckgh6d6tzsellu.png)
+После анализа профиля можно сделать следующие выводы:
 
+- **Функция `leakMemoryRoute`** в файле `./app.js` на строке **63** потребляет **223 MB** — явная утечка памяти.
+- **Функция `slowRoute`** на строке **51** работает **почти 7 минут** — требует оптимизации.
 
-Что мы можем сказать по поводу NodeJS кода после профилирования с помощью Pyroscope:
-- Мы видим что функция leakMemoryRoute в файле ./app.js на строке 63 имеет утечку памяти и занимает 223MB.
-- Мы видим что функция slowRoute в файле ./app.js на 51 строке долго отвечает 6.96 mins.
+## Заключение
+Pyroscope — это отличный инструмент для разработчиков, стремящихся понять и улучшить производительность своих приложений. Благодаря простой интеграции с Node.js и Kubernetes, вы можете быстро выявлять узкие места и принимать обоснованные решения по оптимизации.
+
