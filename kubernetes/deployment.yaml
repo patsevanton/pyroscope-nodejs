@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nodejs-app
-          image: ghcr.io/patsevanton/pyroscope-nodejs:latest
+          image: ghcr.io/patsevanton/profiling-nodejs-app-by-pyroscope-with-sdk:latest
           ports:
             - containerPort: 3000
           env:
